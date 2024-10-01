@@ -1,0 +1,27 @@
+/* client/src/components/CodeEditor.css */
+
+.container {
+    padding: 20px;
+  }
+  
+  .header {
+    margin-bottom: 20px;
+  }
+  
+  .language-select {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .editor {
+    margin-top: 20px;
+  }
+  
+  .button {
+    margin-top: 20px;
+  }
+  
+  .output {
+    margin-top: 20px;
+  }
+  

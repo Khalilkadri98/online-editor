@@ -1,0 +1,26 @@
+.card {
+    height: 100%;
+  }
+  
+  .card-body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-img-top {
+    height: 250px;
+    object-fit: cover;
+  }
+  
+  .card-title {
+    flex-grow: 1;
+  }
+  
+  .card-text {
+    flex-grow: 1;
+  }
+  
+  .card-footer {
+    margin-top: auto;
+  }
+  

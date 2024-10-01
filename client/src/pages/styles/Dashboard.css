@@ -1,0 +1,18 @@
+.dashboard {
+    padding: 60px 0;
+  }
+  
+  .dashboard h2 {
+    margin-bottom: 30px;
+  }
+  
+  .user-info,
+  .recent-activity,
+  .quick-actions {
+    margin-bottom: 30px;
+  }
+  
+  .card {
+    height: 100%;
+  }
+  
