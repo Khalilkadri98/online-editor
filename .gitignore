@@ -1,1 +1,8 @@
-node_modules
+# Ignore node_modules
+node_modules/
+
+# Ignore SSH keys and other sensitive files
+*.pem
+*.ppk
+*.key
+*.rsa
