@@ -175,12 +175,17 @@ const Register = () => {
                   <Form.Group controlId="formYearsOfExperience">
                     <Form.Label>Years of Experience in IT</Form.Label>
                     <Form.Control
-                      type="number"
-                      placeholder="Enter your years of experience"
+                      as="select"
                       value={yearsOfExperience}
                       onChange={(e) => setYearsOfExperience(e.target.value)}
                       required
-                    />
+                    >
+                      <option value="">Select years of experience</option>
+                      <option value="0 to 2">From 0 to 2 years</option>
+                      <option value="2 to 5">From 2 to 5 years</option>
+                      <option value="5 to 10">From 5 to 10 years</option>
+                      <option value="10 years or more">10 years or more</option>
+                    </Form.Control>
                   </Form.Group>
                 </Col>
                 <Col>

@@ -40,7 +40,8 @@ const register = async (req, res) => {
 
     // Hash the password
     //const hashedPassword = await bcrypt.hash(password, 10);
-
+    // Get the current date
+    const currentDate = new Date();
     // Create a new user
     const user = new User({
       email,
@@ -50,6 +51,7 @@ const register = async (req, res) => {
       phoneNumber,
       company,
       yearsOfExperience,
+      inscriptionDate: currentDate, // Add current date as inscriptionDate
     });
     await user.save();
     res.status(201).send("User created");
@@ -98,7 +100,43 @@ const login = async (req, res) => {
     res.status(500).send(err.message);
   }
 };
+// Get user profile
+const getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
+// Update user profile
+const updateUserProfile = async (req, res) => {
+  const { username, gender, phoneNumber, company, yearsOfExperience } = req.body;
+
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.username = username || user.username;
+    user.gender = gender || user.gender;
+    user.phoneNumber = phoneNumber || user.phoneNumber;
+    user.company = company || user.company;
+    user.yearsOfExperience = yearsOfExperience !== undefined ? yearsOfExperience : user.yearsOfExperience;
+
+    await user.save();
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 /*const saveFiles= async (req, res) => {
     const { files } = req.body;
     const userId = req.user.id;
@@ -196,6 +234,8 @@ module.exports = {
   register,
   verifyUsers,
   login,
+  getUserProfile,
+  updateUserProfile,
   saveCode,
   loadCode,
 };

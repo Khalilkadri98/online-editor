@@ -7,7 +7,8 @@ const UserSchema = new mongoose.Schema({
   gender: { type: String, required: true },
   phoneNumber: { type: String, required: true },
   company: { type: String }, // Optional field
-  yearsOfExperience: { type: Number},// Optional field
+  yearsOfExperience: { type: String,required: true},// Optional field
+  inscriptionDate: { type: Date, default: Date.now }, // Include inscriptionDate with a default value of the current date
 });
 
 module.exports = mongoose.model('User', UserSchema);
