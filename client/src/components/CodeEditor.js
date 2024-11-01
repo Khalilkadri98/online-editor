@@ -79,28 +79,48 @@ const CodeEditor = () => {
   };
 
   return (
-    <div>
-      <select onChange={handleLanguageChange} value={language}>
-        <option value="javascript">JavaScript</option>
-        <option value="java">Java</option>
-        <option value="c">C</option>
-        <option value="react">React</option>
-      </select>
+    <div className="container mt-5">
+      <div className="row mb-4">
+        <h2>Select Programming Language:</h2>
+        <div className="col">
+          <select className="form-select" onChange={handleLanguageChange} value={language}>
+            <option value="javascript">JavaScript</option>
+            <option value="java">Java</option>
+            <option value="c">C</option>
+            <option value="react">React</option>
+            <option value="python">Python</option>
+            <option value="php">PHP</option>
+          </select>
+        </div>
+      </div>
 
       {language === 'react' ? (
         <ReactEditor />
       ) : (
         <div>
-          <MonacoEditor
-            height="400px"
-            language={language}
-            theme="vs-dark"
-            value={code}
-            onChange={(value) => setCode(value)}
-          />
-          <button onClick={executeCode}>Run</button>
-          <button onClick={saveCode}>Save</button>
-          <h1>{output}</h1>
+          <div className="row mb-3">
+            <div className="col">
+              <MonacoEditor
+                height="400px"
+                language={language}
+                theme="vs-dark"
+                value={code}
+                onChange={(value) => setCode(value)}
+                options={{ automaticLayout: true }}
+              />
+            </div>
+          </div>
+          <div className="row mb-3">
+            <div className="col">
+              <button className="btn btn-primary me-2" onClick={executeCode}>Run</button>
+              <button className="btn btn-secondary" onClick={saveCode}>Save</button>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <h1>{output}</h1>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -18,7 +18,9 @@
     "express": "^4.21.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.6.3",
-    "tar-fs": "^3.0.6"
+    "nodemailer": "^6.9.15",
+    "tar-fs": "^3.0.6",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.6"

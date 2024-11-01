@@ -1,14 +1,18 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const UserSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  username: { type: String, required: true, unique: true },
+  username: { type: String, required: true },
   gender: { type: String, required: true },
   phoneNumber: { type: String, required: true },
-  company: { type: String }, // Optional field
-  yearsOfExperience: { type: String,required: true},// Optional field
-  inscriptionDate: { type: Date, default: Date.now }, // Include inscriptionDate with a default value of the current date
+  company: { type: String },
+  yearsOfExperience: { type: String, required: true },
+  inscriptionDate: { type: Date, default: Date.now },
+  verified: { type: Boolean, default: false },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
 });
 
-module.exports = mongoose.model('User', UserSchema);
+const User = mongoose.model("User", userSchema);
+module.exports = User;

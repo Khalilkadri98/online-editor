@@ -5,13 +5,18 @@ import Login from './pages/Login';
 import Editor from './components/CodeEditor';
 import Home from './pages/Home';
 import Header from './components/layout/Header';
-import CodeEditor from './components/CodeEditor';
+//import CodeEditor from './components/CodeEditor';
 import Register from './pages/Register';
 import Services from './pages/Services';
 import Footer from './components/layout/Footer';
 import AboutUs from './pages/AboutUs';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import ProtectedRoute from './components/ProtectedRoute';
+
+
 
 const App = () => {
   const token = localStorage.getItem('token');
@@ -25,9 +30,11 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/services" element={<Services />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/editor" element={token ? <Editor /> : <Navigate to="/login" />} />
+        <Route path="/dashboard" element={<ProtectedRoute element={Dashboard} />} />
+        <Route path="/profile" element={<ProtectedRoute element={Profile} />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/editor" element={<ProtectedRoute element={Editor} />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       <Footer/>

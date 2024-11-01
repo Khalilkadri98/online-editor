@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import login from '../assets/images/login.avif'; // Adjust the path accordingly
 import axios from 'axios';
 
@@ -9,8 +9,16 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false); // Track login success
+  const location = useLocation();
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
-
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const message = params.get('message');
+    if (message) {
+      setMessage(message);
+    }
+  }, [location]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(''); // Reset error state on new submission
@@ -44,6 +52,11 @@ const Login = () => {
             {success && (
               <Alert variant="success" className="mt-3">
                 Sign in successful! Redirecting...
+              </Alert>
+            )}
+             {message && (
+              <Alert variant="success" className="mt-3">
+                {message}
               </Alert>
             )}
             <Form onSubmit={handleSubmit}>

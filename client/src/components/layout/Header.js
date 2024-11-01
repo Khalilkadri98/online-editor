@@ -1,7 +1,7 @@
 // src/components/layout/Header.js
 import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
-import { Button, Nav, Dropdown } from 'react-bootstrap';
+import { Nav, Dropdown } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo.svg';
 import { FaBell } from 'react-icons/fa';
@@ -28,12 +28,13 @@ const Header = () => {
         />
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="mr-auto">
+      <Navbar.Collapse id="basic-navbar-nav" className="justify-content-center">
+        <Nav className="ml-auto">
           {!token && <Nav.Link as={Link} to="/services">Services</Nav.Link>}
           {!token && <Nav.Link as={Link} to="/aboutus">About Us</Nav.Link>}
           {!token && <Nav.Link as={Link} to="/register">Register</Nav.Link>}
           {!token && <Nav.Link as={Link} to="/login">Login</Nav.Link>}
+          {!token && <Nav.Link as={Link} to="/reset-password">Reset Password</Nav.Link>}
           {token && <Nav.Link as={Link} to="/Editor">Editor</Nav.Link>}
         </Nav>
         {token && (

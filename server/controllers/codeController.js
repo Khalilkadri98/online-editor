@@ -14,6 +14,10 @@ const getContainerName = (language) => {
       return 'c-container';
     case 'react':
       return 'react-container';
+    case 'python':
+      return 'python-container';
+    case 'php':
+      return 'php-container';
     default:
       throw new Error('Unsupported language');
   }
@@ -29,6 +33,10 @@ const getFileName = (language) => {
       return 'main.c';
     case 'react':
       return 'App.js';
+    case 'python':
+      return 'main.py';
+    case 'php':
+      return 'main.php';
     default:
       throw new Error('Unsupported language');
   }
@@ -44,18 +52,32 @@ const getRunCommand = (language) => {
       return ['sh', '-c', 'gcc -o a.out main.c && ./a.out'];
     case 'react':
       return ['sh', '-c', 'npm run build'];
+    case 'python':
+      return ['python', 'main.py'];
+    case 'php':
+      return ['php', 'main.php'];
     default:
       throw new Error('Unsupported language');
   }
 };
 
 const startContainerIfNeeded = async (container) => {
-  const containerData = await container.inspect();
-  if (!containerData.State.Running) {
-    console.log(`Starting container ${container.id}`);
-    await container.start();
-  } else {
-    console.log(`Container ${container.id} is already running`);
+  try {
+    const containerData = await container.inspect();
+    if (!containerData.State.Running) {
+      console.log(`Starting container ${container.id}`);
+      await container.start();
+    } else {
+      console.log(`Container ${container.id} is already running`);
+    }
+  } catch (err) {
+    console.log(`Container ${container.id} not found. Creating a new one.`);
+    await docker.createContainer({
+      Image: 'python-runner',
+      name: 'python-container',
+      Cmd: getRunCommand('python'),
+      Tty: true,
+    });
   }
 };
 
@@ -128,4 +150,4 @@ const executeCode = async (req, res) => {
   }
 };
 
-module.exports = { executeCode};
+module.exports = { executeCode };
