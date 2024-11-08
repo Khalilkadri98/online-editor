@@ -6,6 +6,8 @@ const cors = require('cors');
 const codeRoutes = require('./routes/codeRoutes');
 const userRoutes = require('./routes/userRoutes');
 const reactRoutes = require('./routes/reactRoutes');
+const quizRoutes = require('./routes/quizRoutes');
+
 
 const mongoose = require('mongoose');
 require('dotenv').config();  // Load environment variables from .env file
@@ -17,6 +19,7 @@ app.use(cors());
 app.use('/api', codeRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/react', reactRoutes);
+app.use('/api/quizzes', quizRoutes);
 
 
 
