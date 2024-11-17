@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Quiz = require('./models/Quiz');
+const Quiz = require('../models/Quiz');
 const dotenv = require('dotenv');
 
 dotenv.config();

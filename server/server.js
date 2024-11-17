@@ -7,6 +7,9 @@ const codeRoutes = require('./routes/codeRoutes');
 const userRoutes = require('./routes/userRoutes');
 const reactRoutes = require('./routes/reactRoutes');
 const quizRoutes = require('./routes/quizRoutes');
+const tutorialRoutes = require('./routes/tutorialRoutes');
+const programmingLanguagesRoutes=require('./routes/programmingLanguagesRoutes');
+
 
 
 const mongoose = require('mongoose');
@@ -19,7 +22,10 @@ app.use(cors());
 app.use('/api', codeRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/react', reactRoutes);
+app.use('/api/programming-languages',programmingLanguagesRoutes);
 app.use('/api/quizzes', quizRoutes);
+app.use('/api/tutorials', tutorialRoutes);
+
 
 
 

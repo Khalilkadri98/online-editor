@@ -23,6 +23,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import UserProgress from "./components/UserProgress";
 import QuizDetail from "./components/QuizDetail";
 import QuizList from "./components/QuizList";
+import TutorialList from "./components/tutorials/TutorialList";
+import TutorialDetail from "./components/tutorials/TutorialDetail";
+import TutorialManager from "./components/tutorials/TutorialManager";
 
 
 
@@ -48,6 +51,9 @@ const App = () => {
         <Route path="/editor" element={<ProtectedRoute element={Editor} />} />
         <Route path="/quizzes" element={<QuizList />} />
         <Route path="/quiz/:quizId" element={<QuizDetail />} />
+        <Route path="/tutorials" element={<TutorialList />} />
+        <Route path="/tutorials/:tutorialId" element={<TutorialDetail />} />
+        <Route path="/manage-tutorials" element={<TutorialManager />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       <Footer />

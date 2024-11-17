@@ -35,6 +35,8 @@ const Header = () => {
           {!token && <Nav.Link as={Link} to="/register">Register</Nav.Link>}
           {!token && <Nav.Link as={Link} to="/login">Login</Nav.Link>}
           {!token && <Nav.Link as={Link} to="/reset-password">Reset Password</Nav.Link>}
+          {token && <Nav.Link as={Link} to="/tutorials">Tutorials</Nav.Link>}
+          {token && <Nav.Link as={Link} to="/quizzes">Quizzes</Nav.Link>}
           {token && <Nav.Link as={Link} to="/Editor">Editor</Nav.Link>}
         </Nav>
         {token && (
