@@ -1,74 +1,94 @@
 // src/components/layout/Header.js
 import React from 'react';
-import Navbar from 'react-bootstrap/Navbar';
-import { Nav, Dropdown } from 'react-bootstrap';
+import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Button, Avatar, Badge } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+import { Notifications as NotificationsIcon } from '@mui/icons-material';
 import logo from '../../assets/images/logo.svg';
-import { FaBell } from 'react-icons/fa';
 import avatar from '../../assets/images/avatar.avif'; // Your avatar image
 
 const Header = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token'); // Check if the user is logged in
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
   const handleLogout = () => {
     localStorage.removeItem('token'); // Remove the token from local storage
     navigate('/login'); // Redirect to login page
   };
 
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <Navbar expand="lg" style={{ backgroundColor: '#f2ddd5' }}>
-      <Navbar.Brand as={Link} to={token ? "/dashboard" : "/"}>
+    <AppBar position="static" style={{ backgroundColor: '#f2ddd5' }}>
+      <Toolbar>
         <img
           src={logo}
           width="80"
           height="40"
-          className="d-inline-block align-top"
           alt="My Website Logo"
+          style={{ cursor: 'pointer' }}
+          onClick={() => navigate(token ? "/dashboard" : "/")}
         />
-      </Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav" className="justify-content-center">
-        <Nav className="ml-auto">
-          {!token && <Nav.Link as={Link} to="/services">Services</Nav.Link>}
-          {!token && <Nav.Link as={Link} to="/aboutus">About Us</Nav.Link>}
-          {!token && <Nav.Link as={Link} to="/register">Register</Nav.Link>}
-          {!token && <Nav.Link as={Link} to="/login">Login</Nav.Link>}
-          {!token && <Nav.Link as={Link} to="/reset-password">Reset Password</Nav.Link>}
-          {token && <Nav.Link as={Link} to="/tutorials">Tutorials</Nav.Link>}
-          {token && <Nav.Link as={Link} to="/quizzes">Quizzes</Nav.Link>}
-          {token && <Nav.Link as={Link} to="/Editor">Editor</Nav.Link>}
-        </Nav>
-        {token && (
-          <Nav className="ml-auto d-flex align-items-center">
-            <Nav.Link>
-              <FaBell size={20} />
-            </Nav.Link>
-            <Dropdown alignRight>
-              <Dropdown.Toggle
-                variant="light"
-                id="dropdown-basic"
-                style={{
-                  backgroundImage: `url(${avatar})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  border: 'none',
-                }}
+        <div style={{ flexGrow: 1 }}></div>
+        <div>
+          {!token && (
+            <>
+              <Button color="inherit" component={Link} to="/services">Services</Button>
+              <Button color="inherit" component={Link} to="/aboutus">About Us</Button>
+              <Button color="inherit" component={Link} to="/register">Register</Button>
+              <Button color="inherit" component={Link} to="/login">Login</Button>
+            </>
+          )}
+          {token && (
+            <>
+              <Button color="inherit" component={Link} to="/tutorials">Tutorials</Button>
+              <Button color="inherit" component={Link} to="/quizzes">Quizzes</Button>
+              <Button color="inherit" component={Link} to="/Editor">Editor</Button>
+              <IconButton color="inherit">
+                <Badge badgeContent={4} color="secondary">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                edge="end"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
               >
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item as={Link} to="/profile">Profile</Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Nav>
-        )}
-      </Navbar.Collapse>
-    </Navbar>
+                <Avatar src={avatar} />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem component={Link} to="/profile">Profile</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
+            </>
+          )}
+        </div>
+      </Toolbar>
+    </AppBar>
   );
 };
 

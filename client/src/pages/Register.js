@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
-import signup from "../assets/images/signup.webp"; // Adjust the path accordingly
+import { Container, Box, Grid, TextField, Button, FormControl, InputLabel, Select, MenuItem, Alert, Checkbox, FormControlLabel, Typography } from "@mui/material";
+import signup from "../assets/images/signup.avif"; // Adjust the path accordingly
 import axios from 'axios';
 
 const Register = () => {
@@ -70,159 +70,153 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <div className="row">
-        <div className="col-sm-4">
-          <img src={signup} alt="signup" />
-        </div>
-        <div className="col-sm-6">
-          <Container className="mt-5">
-            <h2>Sign Up</h2>
-            {error && <Alert variant="danger">{error}</Alert>}
+    <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}>
+      <Container maxWidth="md">
+        <Grid container spacing={4} alignItems="stretch">
+          <Grid item xs={12} sm={6} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <img
+              src={signup}
+              alt="signup"
+              style={{ width: "100%", height: "auto", maxHeight: "100%", objectFit: "cover", borderRadius: "8px" }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <Typography variant="h4" gutterBottom>
+              Sign Up
+            </Typography>
+            {error && <Alert severity="error">{error}</Alert>}
             {success && (
-              <Alert variant="success" className="mt-3">
+              <Alert severity="success" sx={{ mt: 2 }}>
                 Sign up successful! Redirecting to sign-in...
               </Alert>
             )}
-            <Form onSubmit={handleSubmit}>
-              <Row>
-                <Col>
-                  <Form.Group controlId="formUsername">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter your username"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      required
-                    />
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group controlId="formEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control
-                      type="email"
-                      placeholder="Enter your email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-
-              <Row className="mt-3">
-                <Col>
-                  <Form.Group controlId="formPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      placeholder="Enter your password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group controlId="formConfirmPassword">
-                    <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      placeholder="Confirm your password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      required
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-
-              <Row className="mt-3">
-                <Col>
-                  <Form.Group controlId="formGender">
-                    <Form.Label>Gender</Form.Label>
-                    <Form.Control
-                      as="select"
+            <form onSubmit={handleSubmit}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Username"
+                    variant="outlined"
+                    fullWidth
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Email"
+                    variant="outlined"
+                    fullWidth
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Password"
+                    variant="outlined"
+                    fullWidth
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Confirm Password"
+                    variant="outlined"
+                    fullWidth
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <InputLabel>Gender</InputLabel>
+                    <Select
                       value={gender}
                       onChange={(e) => setGender(e.target.value)}
+                      label="Gender"
                       required
                     >
-                      <option value="">Select your gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
-                    </Form.Control>
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group controlId="formPhoneNumber">
-                    <Form.Label>Phone Number</Form.Label>
-                    <Form.Control
-                      type="tel"
-                      placeholder="Enter your phone number"
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      required
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-
-              <Row className="mt-3">
-                <Col>
-                  <Form.Group controlId="formYearsOfExperience">
-                    <Form.Label>Years of Experience in IT</Form.Label>
-                    <Form.Control
-                      as="select"
+                      <MenuItem value="">Select your gender</MenuItem>
+                      <MenuItem value="male">Male</MenuItem>
+                      <MenuItem value="female">Female</MenuItem>
+                      <MenuItem value="other">Other</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Phone Number"
+                    variant="outlined"
+                    fullWidth
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <InputLabel>Years of Experience</InputLabel>
+                    <Select
                       value={yearsOfExperience}
                       onChange={(e) => setYearsOfExperience(e.target.value)}
+                      label="Years of Experience"
                       required
                     >
-                      <option value="">Select years of experience</option>
-                      <option value="0 to 2">From 0 to 2 years</option>
-                      <option value="2 to 5">From 2 to 5 years</option>
-                      <option value="5 to 10">From 5 to 10 years</option>
-                      <option value="10 years or more">10 years or more</option>
-                    </Form.Control>
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group controlId="formCompany">
-                    <Form.Label>Company</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter your company"
-                      value={company}
-                      onChange={(e) => setCompany(e.target.value)}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-
-              <Form.Group className="mt-3" controlId="formAgb">
-                <Form.Check
-                  type="checkbox"
-                  label="I agree to the terms and conditions"
-                  checked={agb}
-                  onChange={(e) => setAgb(e.target.checked)}
-                  required
-                />
-              </Form.Group>
-
-              <Button variant="primary" type="submit" className="mt-3">
+                      <MenuItem value="">Select years of experience</MenuItem>
+                      <MenuItem value="0 to 2">From 0 to 2 years</MenuItem>
+                      <MenuItem value="2 to 5">From 2 to 5 years</MenuItem>
+                      <MenuItem value="5 to 10">From 5 to 10 years</MenuItem>
+                      <MenuItem value="10 years or more">10 years or more</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Company"
+                    variant="outlined"
+                    fullWidth
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={agb}
+                        onChange={(e) => setAgb(e.target.checked)}
+                        required
+                      />
+                    }
+                    label="I agree to the terms and conditions"
+                  />
+                </Grid>
+              </Grid>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{ mt: 3 }}
+              >
                 Sign Up
               </Button>
-            </Form>
-
-            <p className="mt-3">
+            </form>
+            <Typography variant="body2" sx={{ mt: 2 }}>
               Already have an account? <Link to="/login">Login</Link>
-            </p>
-          </Container>
-        </div>
-      </div>
-    </div>
+            </Typography>
+          </Grid>
+        </Grid>
+      </Container>
+    </Box>
   );
 };
 

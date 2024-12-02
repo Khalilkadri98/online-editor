@@ -1,9 +1,8 @@
-// components/TutorialDetail.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Button, Container } from 'react-bootstrap';
-import {jwtDecode} from 'jwt-decode'; // Corrected import statement
+import { Container, Typography, Button, Alert, Box, Stepper, Step, StepLabel } from '@mui/material';
+import { jwtDecode } from 'jwt-decode'; // Corrected import statement
 
 const TutorialDetail = () => {
   const { tutorialId } = useParams();
@@ -77,23 +76,73 @@ const TutorialDetail = () => {
   };
 
   if (!tutorial) {
-    return <p>Loading...</p>;
+    return <Typography variant="h6" color="textSecondary">Loading...</Typography>;
   }
 
   return (
-    <Container className="mt-5">
-      <h2>{tutorial.title}</h2>
-      <p>{tutorial.description}</p>
-      <div>
-        <h3>{tutorial.steps[currentStep - 1].title}</h3>
-        <p>{tutorial.steps[currentStep - 1].content}</p>
-      </div>
-      <Button onClick={handlePrevious} disabled={currentStep === 1}>
-        Previous
-      </Button>
-      <Button onClick={handleNext} disabled={currentStep === tutorial.steps.length}>
-        Next
-      </Button>
+    <Container maxWidth="lg" sx={{ paddingTop: '20px' }}>
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: '#6c5ce7' }}>
+        {tutorial.title}
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 3 }}>
+        {tutorial.description}
+      </Typography>
+
+      <Box sx={{ mb: 4 }}>
+        <Stepper activeStep={currentStep - 1} alternativeLabel>
+          {tutorial.steps.map((step, index) => (
+            <Step key={index}>
+              <StepLabel>{step.title}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      </Box>
+
+      <Box 
+        sx={{ 
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          minHeight: '60vh',  // Make sure it occupies enough vertical space
+          backgroundColor: '#f5f5f5',
+          padding: 3,
+          borderRadius: 2,
+          boxShadow: 3,
+          textAlign: 'center',
+        }}
+      >
+        <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#6c5ce7' }}>
+          {tutorial.steps[currentStep - 1].title}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
+          {tutorial.steps[currentStep - 1].content}
+        </Typography>
+      </Box>
+
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={handlePrevious}
+          disabled={currentStep === 1}
+          sx={{ width: '48%' }}
+        >
+          Previous
+        </Button>
+
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleNext}
+          disabled={currentStep === tutorial.steps.length}
+          sx={{ width: '48%' }}
+        >
+          Next
+        </Button>
+      </Box>
     </Container>
   );
 };

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
+import { Box, Button, TextField, Typography } from '@mui/material';
+import Draggable from 'react-draggable'; // Import react-draggable
 
 const customStyles = {
   content: {
@@ -9,8 +11,12 @@ const customStyles = {
     right: 'auto',
     bottom: 'auto',
     marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
+    transform: 'translate(-50%, -50%)',
+    padding: '20px',
+    borderRadius: '8px',
+    width: '80%',
+    maxWidth: '600px',
+  },
 };
 
 const TutorialForm = ({ isOpen, onClose, tutorial, onSave, programmingLanguages }) => {
@@ -66,30 +72,42 @@ const TutorialForm = ({ isOpen, onClose, tutorial, onSave, programmingLanguages 
       style={customStyles}
       contentLabel="Tutorial Form"
     >
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title</label>
-          <input
-            type="text"
+      <Draggable>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Typography variant="h6" gutterBottom>
+            {tutorial ? 'Edit Tutorial' : 'Create New Tutorial'}
+          </Typography>
+
+          <TextField
+            label="Title"
+            variant="outlined"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
+            fullWidth
           />
-        </div>
-        <div>
-          <label>Description</label>
-          <textarea
+
+          <TextField
+            label="Description"
+            variant="outlined"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
-          ></textarea>
-        </div>
-        <div>
-          <label>Programming Language</label>
-          <select
+            multiline
+            rows={4}
+            fullWidth
+          />
+
+          <TextField
+            label="Programming Language"
+            select
             value={languageId}
             onChange={(e) => setLanguageId(e.target.value)}
             required
+            fullWidth
+            SelectProps={{
+              native: true,
+            }}
           >
             <option value="">Select Language</option>
             {programmingLanguages.map((lang) => (
@@ -97,34 +115,46 @@ const TutorialForm = ({ isOpen, onClose, tutorial, onSave, programmingLanguages 
                 {lang.name}
               </option>
             ))}
-          </select>
-        </div>
-        <div>
-          <label>Steps</label>
+          </TextField>
+
+          <Typography variant="subtitle1" gutterBottom>
+            Steps
+          </Typography>
           {steps.map((step, index) => (
-            <div key={index}>
-              <input
-                type="text"
-                placeholder={`Step ${index + 1} Title`}
+            <Box key={index} sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+              <TextField
+                label={`Step ${index + 1} Title`}
                 value={step.title}
                 onChange={(e) => handleStepChange(index, 'title', e.target.value)}
                 required
+                fullWidth
               />
-              <textarea
-                placeholder={`Step ${index + 1} Content`}
+              <TextField
+                label={`Step ${index + 1} Content`}
                 value={step.content}
                 onChange={(e) => handleStepChange(index, 'content', e.target.value)}
                 required
-              ></textarea>
-            </div>
+                multiline
+                rows={4}
+                fullWidth
+              />
+            </Box>
           ))}
-          <button type="button" onClick={handleAddStep}>
+
+          <Button variant="outlined" onClick={handleAddStep}>
             Add Step
-          </button>
-        </div>
-        <button type="submit">Save Tutorial</button>
-        <button type="button" onClick={onClose}>Cancel</button>
-      </form>
+          </Button>
+
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, marginTop: 3 }}>
+            <Button variant="outlined" color="secondary" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained" color="primary">
+              Save Tutorial
+            </Button>
+          </Box>
+        </Box>
+      </Draggable>
     </Modal>
   );
 };

@@ -1,5 +1,5 @@
-import React, { useEffect,useState } from 'react';
-import { Form, Button, Container, Alert } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Container, Box, Grid, TextField, Button, Alert, Typography } from '@mui/material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import login from '../assets/images/login.avif'; // Adjust the path accordingly
 import axios from 'axios';
@@ -9,9 +9,10 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false); // Track login success
-  const location = useLocation();
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const message = params.get('message');
@@ -19,6 +20,7 @@ const Login = () => {
       setMessage(message);
     }
   }, [location]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(''); // Reset error state on new submission
@@ -40,52 +42,74 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <div className="row">
-        <div className="col-sm-6">
-          <img src={login} alt="My login" />
-        </div>
-        <div className="col-sm-4">
-          <Container className="mt-5">
-            <h2>Sign In</h2>
-            {error && <Alert variant="danger">{error}</Alert>}
+    <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}>
+      <Container maxWidth="md">
+        <Grid container spacing={4} alignItems="stretch">
+          {/* Image Section */}
+          <Grid item xs={12} sm={6} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <img
+              src={login}
+              alt="Login"
+            
+            />
+          </Grid>
+
+          {/* Form Section */}
+          <Grid item xs={12} sm={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <Typography variant="h4" gutterBottom>
+              Sign In
+            </Typography>
+
+            {error && <Alert severity="error">{error}</Alert>}
             {success && (
-              <Alert variant="success" className="mt-3">
+              <Alert severity="success" sx={{ mt: 2 }}>
                 Sign in successful! Redirecting...
               </Alert>
             )}
-             {message && (
-              <Alert variant="success" className="mt-3">
+            {message && (
+              <Alert severity="success" sx={{ mt: 2 }}>
                 {message}
               </Alert>
             )}
-            <Form onSubmit={handleSubmit}>
-              <Form.Group controlId="formEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </Form.Group>
 
-              <Form.Group controlId="formPassword" className="mt-3">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </Form.Group>
+            <form onSubmit={handleSubmit}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Email"
+                    variant="outlined"
+                    fullWidth
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Password"
+                    variant="outlined"
+                    fullWidth
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    sx={{ mt: 3 }}
+                  >
+                    Sign In
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
 
-              <Button variant="primary" type="submit" className="mt-3">
-                Sign In
-              </Button>
-            </Form>
             <div className="mt-3">
               <Link to="/forgot-password">Forgot password?</Link>
             </div>
@@ -93,10 +117,10 @@ const Login = () => {
               <span>Don't have an account? </span>
               <Link to="/register">Sign up here.</Link>
             </div>
-          </Container>
-        </div>
-      </div>
-    </div>
+          </Grid>
+        </Grid>
+      </Container>
+    </Box>
   );
 };
 

@@ -2,6 +2,22 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import TutorialForm from './TutorialForm';
 import Modal from 'react-modal';
+import { Box, Button, Typography, List, ListItem, Card, CardContent, CardActions, Divider } from '@mui/material';
+
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    padding: '20px',
+    borderRadius: '8px',
+    width: '80%',
+    maxWidth: '600px',
+  },
+};
 
 const TutorialManager = () => {
   const [tutorials, setTutorials] = useState([]);
@@ -48,24 +64,54 @@ const TutorialManager = () => {
   };
 
   const openModal = (tutorial = null) => {
-    setSelectedTutorial(tutorial);
+    setSelectedTutorial(tutorial);  // Pass selected tutorial to state
     setModalIsOpen(true);
   };
 
   return (
-    <div>
-      <h1>Tutorial Manager</h1>
-      <button onClick={() => openModal()}>Create New Tutorial</button>
-      <ul>
+    <Box sx={{ padding: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Tutorial Manager
+      </Typography>
+      <Button 
+        variant="contained" 
+        color="primary" 
+        onClick={() => openModal()} 
+        sx={{ marginBottom: 3 }}
+      >
+        Create New Tutorial
+      </Button>
+      <List>
         {tutorials.map((tutorial) => (
-          <li key={tutorial._id}>
-            <h2>{tutorial.title}</h2>
-            <p>{tutorial.description}</p>
-            <button onClick={() => openModal(tutorial)}>Edit</button>
-            <button onClick={() => handleDelete(tutorial._id)}>Delete</button>
-          </li>
+          <ListItem key={tutorial._id} sx={{ marginBottom: 2 }}>
+            <Card variant="outlined" sx={{ width: '100%' }}>
+              <CardContent>
+                <Typography variant="h6">{tutorial.title}</Typography>
+                <Typography variant="body2" color="textSecondary" gutterBottom>
+                  {tutorial.description}
+                </Typography>
+              </CardContent>
+              <Divider />
+              <CardActions sx={{ justifyContent: 'space-between' }}>
+                <Button 
+                  size="small" 
+                  color="primary" 
+                  onClick={() => openModal(tutorial)}
+                >
+                  Edit
+                </Button>
+                <Button 
+                  size="small" 
+                  color="secondary" 
+                  onClick={() => handleDelete(tutorial._id)}
+                >
+                  Delete
+                </Button>
+              </CardActions>
+            </Card>
+          </ListItem>
         ))}
-      </ul>
+      </List>
       <TutorialForm
         isOpen={modalIsOpen}
         onClose={() => setModalIsOpen(false)}
@@ -73,7 +119,7 @@ const TutorialManager = () => {
         onSave={handleSave}
         programmingLanguages={programmingLanguages}
       />
-    </div>
+    </Box>
   );
 };
 

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import axios from 'axios';
-import ReactEditor from './ReactEditor';
+import ReactEditor from '../ReactEditor';
+import { Box, Button, Select, MenuItem, Typography, Grid, CircularProgress } from '@mui/material';
 
 const CodeEditor = () => {
   const [code, setCode] = useState('');
   const [language, setLanguage] = useState('javascript');
   const [output, setOutput] = useState('');
   const [savedCodes, setSavedCodes] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // Load saved code snippets when the component mounts
   useEffect(() => {
@@ -15,6 +17,7 @@ const CodeEditor = () => {
   }, []);
 
   const loadSavedCodes = async () => {
+    setLoading(true);
     try {
       const response = await axios.get('http://localhost:5000/api/users/load-code', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -22,40 +25,47 @@ const CodeEditor = () => {
       setSavedCodes(response.data);
     } catch (error) {
       console.error('Error loading saved codes:', error.response ? error.response.data : error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const executeCode = async () => {
+    setLoading(true);
     try {
       const response = await axios.post('http://localhost:5000/api/execute', {
         code,
         language,
       });
-      console.log(response.data);
       setOutput(response.data.output);
     } catch (error) {
       console.error('Error executing code:', error.response ? error.response.data : error.message);
       setOutput('Error executing code');
+    } finally {
+      setLoading(false);
     }
   };
 
   const saveCode = async () => {
+    setLoading(true);
     try {
-      const token = localStorage.getItem('token'); // Get the token from localStorage
+      const token = localStorage.getItem('token');
       const response = await axios.post('http://localhost:5000/api/users/save-code', {
         title: `My ${language} code`,
         code,
         language,
       }, {
-        headers: { Authorization: `Bearer ${token}` }, // Include the token in headers
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      console.log(response.data); // Log success message from the server
+      console.log(response.data);
       setOutput('Code saved successfully!');
       loadSavedCodes(); // Reload saved codes after saving
     } catch (error) {
       console.error('Error saving code:', error.response ? error.response.data : error.message);
       setOutput('Error saving code');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -79,27 +89,31 @@ const CodeEditor = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row mb-4">
-        <h2>Select Programming Language:</h2>
-        <div className="col">
-          <select className="form-select" onChange={handleLanguageChange} value={language}>
-            <option value="javascript">JavaScript</option>
-            <option value="java">Java</option>
-            <option value="c">C</option>
-            <option value="react">React</option>
-            <option value="python">Python</option>
-            <option value="php">PHP</option>
-          </select>
-        </div>
-      </div>
+    <Box sx={{ padding: 3 }}>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={4}>
+          <Typography variant="h6">Select Programming Language:</Typography>
+          <Select
+            fullWidth
+            value={language}
+            onChange={handleLanguageChange}
+            variant="outlined"
+            sx={{ marginBottom: 2 }}
+          >
+            <MenuItem value="javascript">JavaScript</MenuItem>
+            <MenuItem value="java">Java</MenuItem>
+            <MenuItem value="c">C</MenuItem>
+            <MenuItem value="react">React</MenuItem>
+            <MenuItem value="python">Python</MenuItem>
+            <MenuItem value="php">PHP</MenuItem>
+          </Select>
+        </Grid>
 
-      {language === 'react' ? (
-        <ReactEditor />
-      ) : (
-        <div>
-          <div className="row mb-3">
-            <div className="col">
+        <Grid item xs={12} md={8}>
+          {language === 'react' ? (
+            <ReactEditor />
+          ) : (
+            <Box>
               <MonacoEditor
                 height="400px"
                 language={language}
@@ -108,22 +122,40 @@ const CodeEditor = () => {
                 onChange={(value) => setCode(value)}
                 options={{ automaticLayout: true }}
               />
-            </div>
-          </div>
-          <div className="row mb-3">
-            <div className="col">
-              <button className="btn btn-primary me-2" onClick={executeCode}>Run</button>
-              <button className="btn btn-secondary" onClick={saveCode}>Save</button>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col">
-              <h1>{output}</h1>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+            </Box>
+          )}
+        </Grid>
+
+        <Grid item xs={12}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={executeCode}
+              sx={{ marginRight: 2 }}
+              disabled={loading}
+            >
+              {loading ? <CircularProgress size={24} color="inherit" /> : 'Run'}
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={saveCode}
+              disabled={loading}
+            >
+              {loading ? <CircularProgress size={24} color="inherit" /> : 'Save'}
+            </Button>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h6">Output:</Typography>
+          <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+            {output || (loading ? 'Loading...' : '')}
+          </Typography>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

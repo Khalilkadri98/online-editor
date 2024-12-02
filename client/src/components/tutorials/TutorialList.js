@@ -1,8 +1,7 @@
-// components/TutorialList.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Card, Button, Container, Row, Col } from 'react-bootstrap';
+import { Container, Typography, Grid, Card, CardContent, Button, Alert } from '@mui/material';
 
 const TutorialList = () => {
   const [tutorials, setTutorials] = useState([]);
@@ -38,27 +37,51 @@ const TutorialList = () => {
   }, {});
 
   return (
-    <Container className="mt-5">
-      <h2>Select a Tutorial:</h2>
-      {error && <p>{error}</p>}
+    <Container
+      maxWidth="lg"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        paddingTop: '20px',
+      }}
+    >
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: '#6c5ce7' }}>
+        Select a Tutorial:
+      </Typography>
+      
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      
       {Object.keys(groupedTutorials).map((language) => (
         <div key={language}>
-          <h3>{language}</h3>
-          <Row>
+          <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: '16px', color: '#6c5ce7' }}>
+            {language}
+          </Typography>
+          
+          <Grid container spacing={3}>
             {groupedTutorials[language].map((tutorial) => (
-              <Col key={tutorial._id} sm={12} md={6} lg={4} className="mb-4">
-                <Card>
-                  <Card.Body>
-                    <Card.Title>{tutorial.title}</Card.Title>
-                    <Card.Text>{tutorial.description}</Card.Text>
-                    <Button onClick={() => handleTutorialSelect(tutorial._id)}>
-                      Start learning now.
+              <Grid item key={tutorial._id} xs={12} sm={6} md={4}>
+                <Card sx={{ maxWidth: 345, boxShadow: 3 }}>
+                  <CardContent>
+                    <Typography variant="h6" component="div">
+                      {tutorial.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 2 }}>
+                      {tutorial.description}
+                    </Typography>
+                    <Button 
+                      variant="contained" 
+                      color="primary" 
+                      fullWidth 
+                      onClick={() => handleTutorialSelect(tutorial._id)}
+                    >
+                      Start learning now
                     </Button>
-                  </Card.Body>
+                  </CardContent>
                 </Card>
-              </Col>
+              </Grid>
             ))}
-          </Row>
+          </Grid>
         </div>
       ))}
     </Container>

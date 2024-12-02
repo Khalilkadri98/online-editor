@@ -1,88 +1,119 @@
-import React from 'react';
-import { Container, Row, Col, Card, ListGroup, Button } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/Dashboard.css';  // Import your custom CSS file
+import React, { useState, useEffect } from 'react';
+import { Box, Grid, Card, CardContent, Typography, Button, CircularProgress, Paper } from '@mui/material';
+import axios from 'axios';
 
 const Dashboard = () => {
+  const [userData, setUserData] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  // Fetch user data on component mount
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/users/profile', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        });
+        setUserData(response.data);
+      } catch (error) {
+        console.error('Error fetching user data:', error.response ? error.response.data : error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   return (
-    <section className="dashboard">
-      <Container>
-        <h2 className="text-center">User Dashboard</h2>
+    <Box sx={{ padding: 3 }}>
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <>
+          {/* Welcome Section */}
+          <Box sx={{ marginBottom: 3 }}>
+            <Typography variant="h4" gutterBottom>
+              Welcome, {userData.username || 'User'}!
+            </Typography>
+            <Typography variant="body1">
+              You are logged in as {userData.email || 'user@example.com'}
+            </Typography>
+          </Box>
 
-        {/* User Information */}
-        <section className="user-info">
-          <Row>
-            <Col md={6}>
-              <Card>
-                <Card.Header>User Information</Card.Header>
-                <Card.Body>
-                  <Card.Title>John Doe</Card.Title>
-                  <Card.Text>Email: john.doe@example.com</Card.Text>
-                  <Card.Text>Joined: January 1, 2024</Card.Text>
-                </Card.Body>
+          {/* Dashboard Cards */}
+          <Grid container spacing={3}>
+            {/* Statistics Card Example 1 */}
+            <Grid item xs={12} sm={6} md={4}>
+              <Card sx={{ height: '100%' }}>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Total Projects
+                  </Typography>
+                  <Typography variant="h4">
+                    {userData.totalProjects || 0}
+                  </Typography>
+                  <Button variant="outlined" sx={{ marginTop: 2 }}>
+                    View Projects
+                  </Button>
+                </CardContent>
               </Card>
-            </Col>
-            <Col md={6}>
-              <Card>
-                <Card.Header>Account Details</Card.Header>
-                <Card.Body>
-                  <Card.Text>Subscription: Premium</Card.Text>
-                  <Card.Text>Status: Active</Card.Text>
-                  <Button variant="primary">Manage Subscription</Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </section>
+            </Grid>
 
-        {/* Recent Activity */}
-        <section className="recent-activity">
-          <Row>
-            <Col md={12}>
-              <Card>
-                <Card.Header>Recent Activity</Card.Header>
-                <ListGroup variant="flush">
-                  <ListGroup.Item>Edited "project1.js" on September 25, 2024</ListGroup.Item>
-                  <ListGroup.Item>Created "project2.js" on September 24, 2024</ListGroup.Item>
-                  <ListGroup.Item>Joined a collaborative session with Jane Doe on September 23, 2024</ListGroup.Item>
-                  <ListGroup.Item>Upgraded to Premium on September 22, 2024</ListGroup.Item>
-                </ListGroup>
+            {/* Statistics Card Example 2 */}
+            <Grid item xs={12} sm={6} md={4}>
+              <Card sx={{ height: '100%' }}>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Total Code Saved
+                  </Typography>
+                  <Typography variant="h4">
+                    {userData.totalSavedCode || 0}
+                  </Typography>
+                  <Button variant="outlined" sx={{ marginTop: 2 }}>
+                    View Saved Codes
+                  </Button>
+                </CardContent>
               </Card>
-            </Col>
-          </Row>
-        </section>
+            </Grid>
 
-        {/* Quick Actions */}
-        <section className="quick-actions">
-          <Row>
-            <Col md={4} className="mb-4">
-              <Card className="h-100">
-                <Card.Body>
-                  <Card.Title>Start New Project</Card.Title>
-                  <Button variant="success" block>Create Project</Button>
-                </Card.Body>
+            {/* Statistics Card Example 3 */}
+            <Grid item xs={12} sm={6} md={4}>
+              <Card sx={{ height: '100%' }}>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Recent Activity
+                  </Typography>
+                  <Typography variant="body1">
+                    You have executed 5 code snippets today.
+                  </Typography>
+                  <Button variant="outlined" sx={{ marginTop: 2 }}>
+                    View Activity
+                  </Button>
+                </CardContent>
               </Card>
-            </Col>
-            <Col md={4} className="mb-4">
-              <Card className="h-100">
-                <Card.Body>
-                  <Card.Title>View Projects</Card.Title>
-                  <Button variant="info" block>Go to Projects</Button>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={4} className="mb-4">
-              <Card className="h-100">
-                <Card.Body>
-                  <Card.Title>Join Collaboration</Card.Title>
-                  <Button variant="warning" block>Join Now</Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </section>
-      </Container>
-    </section>
+            </Grid>
+          </Grid>
+
+          {/* Recent Activity Section */}
+          <Box sx={{ marginTop: 5 }}>
+            <Typography variant="h6" gutterBottom>
+              Recent Activity
+            </Typography>
+            <Paper sx={{ padding: 2, backgroundColor: '#f5f5f5' }}>
+              <Typography variant="body1" sx={{ marginBottom: 2 }}>
+                - Completed a JavaScript challenge.
+              </Typography>
+              <Typography variant="body1" sx={{ marginBottom: 2 }}>
+                - Executed Python code to test new algorithms.
+              </Typography>
+              <Typography variant="body1">
+                - Saved a new project: "React Components Design."
+              </Typography>
+            </Paper>
+          </Box>
+        </>
+      )}
+    </Box>
   );
 };
 
