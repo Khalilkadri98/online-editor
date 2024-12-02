@@ -24,8 +24,8 @@ This project is a comprehensive web application built using the MERN (MongoDB, E
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/mern-code-editor.git
-    cd mern-code-editor
+    git clone https://github.com/Khalilkadri98/online-editor
+    cd online-editor
     ```
 
 2. Install server dependencies:
